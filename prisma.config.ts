@@ -11,6 +11,8 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    // Migrations use the direct (session) connection; the runtime client uses
+    // the transaction pooler via the driver adapter (see src/lib/db.ts).
+    url: process.env["DIRECT_URL"] ?? process.env["DATABASE_URL"],
   },
 });
