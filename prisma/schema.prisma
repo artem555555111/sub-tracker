@@ -1,0 +1,186 @@
+// Prisma 7 schema — SQLite for local dev.
+// Models use camelCase fields mapped to snake_case columns/tables so the
+// migration to Postgres/Supabase later is mechanical. Money is Float here
+// (SQLite has no Decimal); switch to Decimal when moving to Postgres.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ---------------------------------------------------------------------------
+// Auth.js (NextAuth v5) models — standard adapter shape.
+// ---------------------------------------------------------------------------
+
+model User {
+  id                 String    @id @default(cuid())
+  email              String    @unique
+  emailVerified      DateTime? @map("email_verified")
+  name               String?
+  image              String?
+  passwordHash       String?   @map("password_hash")
+
+  // App profile / preferences
+  locale             String    @default("en")
+  currency           String    @default("EUR")
+  country            String? // nullable — used to highlight local services
+  plan               String    @default("free") // 'free' | 'premium'
+  stripeCustomerId   String?   @map("stripe_customer_id")
+  reminderDaysBefore Int       @default(2) @map("reminder_days_before") // default for new subs
+
+  createdAt          DateTime  @default(now()) @map("created_at")
+
+  accounts          Account[]
+  sessions          Session[]
+  subscriptions     Subscription[]
+  pushSubscriptions PushSubscription[]
+  notificationLogs  NotificationLog[]
+  aiAudit           AiAudit?
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ---------------------------------------------------------------------------
+// Domain models
+// ---------------------------------------------------------------------------
+
+// Shared European service library. country = NULL means pan-European,
+// a country code (PL, DE, FR, ...) means a local service.
+model ServiceCatalog {
+  id              String  @id @default(cuid())
+  name            String
+  category        String
+  country         String? // NULL = pan-European
+  logoUrl         String? @map("logo_url")
+  typicalPrice    Float?  @map("typical_price")
+  typicalCurrency String? @map("typical_currency")
+  defaultCycle    String? @map("default_cycle")
+
+  subscriptions Subscription[]
+
+  @@unique([name, country])
+  @@index([country])
+  @@map("service_catalog")
+}
+
+model Subscription {
+  id                 String    @id @default(cuid())
+  userId             String    @map("user_id")
+  serviceName        String    @map("service_name")
+  serviceId          String?   @map("service_id") // FK -> service_catalog, null for custom
+  category           String
+  amount             Float
+  currency           String
+  billingCycle       String    @map("billing_cycle") // monthly | yearly | quarterly | weekly | custom
+  customCycleDays    Int?      @map("custom_cycle_days")
+  nextPaymentDate    DateTime  @map("next_payment_date")
+  startDate          DateTime? @map("start_date")
+  paymentMethodLabel String?   @map("payment_method_label")
+  status             String    @default("active") // active | paused | cancelled
+  isTrial            Boolean   @default(false) @map("is_trial")
+  trialEndDate       DateTime? @map("trial_end_date")
+  isUnused           Boolean   @default(false) @map("is_unused")
+  reminderDaysBefore Int       @default(2) @map("reminder_days_before")
+  notes              String?
+  createdAt          DateTime  @default(now()) @map("created_at")
+
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  service          ServiceCatalog?   @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  notificationLogs NotificationLog[]
+
+  @@index([userId])
+  @@index([nextPaymentDate])
+  @@map("subscriptions")
+}
+
+// Web Push subscriptions (one per browser/device the user enables).
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("push_subscriptions")
+}
+
+// Dedupe log so the daily cron never sends the same reminder twice.
+model NotificationLog {
+  id             String   @id @default(cuid())
+  userId         String   @map("user_id")
+  subscriptionId String   @map("subscription_id")
+  type           String // 'payment' | 'trial'
+  targetDate     DateTime @map("target_date")
+  sentPush       Boolean  @default(false) @map("sent_push")
+  sentEmail      Boolean  @default(false) @map("sent_email")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@unique([subscriptionId, type, targetDate])
+  @@index([userId])
+  @@map("notification_logs")
+}
+
+// Cached AI audit result (one latest per user; also used for the 24h rate limit).
+model AiAudit {
+  id        String   @id @default(cuid())
+  userId    String   @unique @map("user_id")
+  result    String // JSON string of the audit result
+  currency  String
+  source    String   @default("ai") // 'ai' | 'heuristic'
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("ai_audits")
+}
