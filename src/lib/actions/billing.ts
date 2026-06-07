@@ -22,36 +22,43 @@ export async function createCheckout(planId: string): Promise<BillingResult> {
   const price = priceIdFor(plan);
   if (!price) return { error: "not_configured" };
 
-  const stripe = getStripe();
+  let checkoutUrl: string | null = null;
+  try {
+    const stripe = getStripe();
 
-  let customerId = user.stripeCustomerId ?? undefined;
-  if (!customerId) {
-    const customer = await stripe.customers.create({
-      email: user.email,
-      metadata: { userId: user.id },
+    let customerId = user.stripeCustomerId ?? undefined;
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: user.email,
+        metadata: { userId: user.id },
+      });
+      customerId = customer.id;
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { stripeCustomerId: customerId },
+      });
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      mode: plan.mode,
+      customer: customerId,
+      line_items: [{ price, quantity: 1 }],
+      success_url: `${APP_URL}/dashboard?upgraded=1`,
+      cancel_url: `${APP_URL}/upgrade`,
+      client_reference_id: user.id,
+      allow_promotion_codes: true,
+      metadata: { userId: user.id, planId: plan.id },
+      ...(plan.mode === "subscription"
+        ? { subscription_data: { metadata: { userId: user.id } } }
+        : {}),
     });
-    customerId = customer.id;
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { stripeCustomerId: customerId },
-    });
+    checkoutUrl = session.url;
+  } catch (err) {
+    console.error("[checkout] Stripe error:", err);
+    return { error: "failed" };
   }
 
-  const session = await stripe.checkout.sessions.create({
-    mode: plan.mode,
-    customer: customerId,
-    line_items: [{ price, quantity: 1 }],
-    success_url: `${APP_URL}/dashboard?upgraded=1`,
-    cancel_url: `${APP_URL}/upgrade`,
-    client_reference_id: user.id,
-    allow_promotion_codes: true,
-    metadata: { userId: user.id, planId: plan.id },
-    ...(plan.mode === "subscription"
-      ? { subscription_data: { metadata: { userId: user.id } } }
-      : {}),
-  });
-
-  if (session.url) redirect(session.url);
+  if (checkoutUrl) redirect(checkoutUrl);
   return { error: "failed" };
 }
 
@@ -61,12 +68,19 @@ export async function billingPortalAction(): Promise<void> {
   if (!user) redirect("/login");
   if (!stripeConfigured() || !user.stripeCustomerId) return;
 
-  const stripe = getStripe();
-  const portal = await stripe.billingPortal.sessions.create({
-    customer: user.stripeCustomerId,
-    return_url: `${APP_URL}/settings`,
-  });
-  redirect(portal.url);
+  let portalUrl: string | null = null;
+  try {
+    const stripe = getStripe();
+    const portal = await stripe.billingPortal.sessions.create({
+      customer: user.stripeCustomerId,
+      return_url: `${APP_URL}/settings`,
+    });
+    portalUrl = portal.url;
+  } catch (err) {
+    console.error("[billing portal] Stripe error:", err);
+    return;
+  }
+  redirect(portalUrl);
 }
 
 // DEV ONLY: flip the current user's plan to exercise premium gating locally
