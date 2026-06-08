@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { convert } from "@/lib/fx";
 import { type BillingCycle, monthlyAmount, yearlyAmount } from "@/lib/money";
 import en from "@/messages/en.json";
 import pl from "@/messages/pl.json";
@@ -41,14 +42,24 @@ export async function runAudit(opts: {
   locale: string;
   currency: string;
 }): Promise<{ result: AuditResult; source: "ai" | "heuristic" }> {
+  // Normalize every amount into the target currency up front so both the Claude
+  // prompt ("all amounts are in {currency}") and the heuristic sums are correct
+  // even when subscriptions are in different currencies (see lib/fx.ts).
+  const subs = opts.subs.map((s) =>
+    s.currency === opts.currency
+      ? s
+      : { ...s, amount: convert(s.amount, s.currency, opts.currency), currency: opts.currency },
+  );
+  const normalized = { ...opts, subs };
+
   if (process.env.ANTHROPIC_API_KEY) {
     try {
-      return { result: await runWithClaude(opts), source: "ai" };
+      return { result: await runWithClaude(normalized), source: "ai" };
     } catch (err) {
       console.error("[audit] Claude call failed, falling back to heuristic:", err);
     }
   }
-  return { result: heuristicAudit(opts), source: "heuristic" };
+  return { result: heuristicAudit(normalized), source: "heuristic" };
 }
 
 // --- Claude --------------------------------------------------------------

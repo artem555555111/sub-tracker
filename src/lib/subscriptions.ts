@@ -1,5 +1,6 @@
 import type { Subscription } from "@/generated/prisma/client";
 import { prisma } from "./db";
+import { convert } from "./fx";
 import { type BillingCycle, monthlyAmount, yearlyAmount } from "./money";
 
 export function getAllSubscriptions(userId: string) {
@@ -25,20 +26,24 @@ export type Totals = {
   monthly: number;
   yearly: number;
   byCategory: CategoryTotal[];
+  mixed: boolean; // true if any sub is in a currency other than the target → totals are FX-approximated
 };
 
-// Totals are computed in the user's currency. For the MVP we assume amounts are
-// in that currency (the add form defaults to it); FX conversion is a later add.
-export function computeTotals(subs: Subscription[]): Totals {
+// Totals in `targetCurrency` (the user's display currency). Each subscription's
+// amount is converted from its own currency before summing — see lib/fx.ts.
+export function computeTotals(subs: Subscription[], targetCurrency: string): Totals {
   let monthly = 0;
   let yearly = 0;
+  let mixed = false;
   const byCat = new Map<string, number>();
 
   for (const s of subs) {
+    if (s.currency !== targetCurrency) mixed = true;
     const cycle = s.billingCycle as BillingCycle;
-    const m = monthlyAmount(s.amount, cycle, s.customCycleDays);
+    const amount = convert(s.amount, s.currency, targetCurrency);
+    const m = monthlyAmount(amount, cycle, s.customCycleDays);
     monthly += m;
-    yearly += yearlyAmount(s.amount, cycle, s.customCycleDays);
+    yearly += yearlyAmount(amount, cycle, s.customCycleDays);
     byCat.set(s.category, (byCat.get(s.category) ?? 0) + m);
   }
 
@@ -46,5 +51,5 @@ export function computeTotals(subs: Subscription[]): Totals {
     .map(([category, m]) => ({ category, monthly: m }))
     .sort((a, b) => b.monthly - a.monthly);
 
-  return { monthly, yearly, byCategory };
+  return { monthly, yearly, byCategory, mixed };
 }

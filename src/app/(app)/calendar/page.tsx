@@ -1,5 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { categoryColor } from "@/lib/categories";
+import { convert } from "@/lib/fx";
 import {
   type BillingCycle,
   daysUntil,
@@ -54,7 +55,10 @@ export default async function CalendarPage() {
     else groups.set(key, [o]);
   }
 
-  const periodTotal = occ.reduce((sum, o) => sum + o.amount, 0);
+  // Totals are shown in the user's currency; each charge is converted from its
+  // own currency first (line items below stay in their original currency).
+  const periodTotal = occ.reduce((sum, o) => sum + convert(o.amount, o.currency, user.currency), 0);
+  const periodApprox = occ.some((o) => o.currency !== user.currency);
 
   return (
     <div className="space-y-5">
@@ -68,6 +72,7 @@ export default async function CalendarPage() {
           {t("periodTotal", { days: WINDOW_DAYS })}
         </p>
         <p className="mt-1 text-2xl font-bold tabular-nums">
+          {periodApprox ? "≈ " : ""}
           {formatMoneyRounded(periodTotal, user.currency, locale)}
         </p>
       </div>
@@ -87,12 +92,17 @@ export default async function CalendarPage() {
                 : du === 1
                   ? t("tomorrow")
                   : formatDate(d, locale, { weekday: "short", day: "numeric", month: "short" });
-            const dayTotal = items.reduce((sum, o) => sum + o.amount, 0);
+            const dayTotal = items.reduce(
+              (sum, o) => sum + convert(o.amount, o.currency, user.currency),
+              0,
+            );
+            const dayApprox = items.some((o) => o.currency !== user.currency);
             return (
               <section key={key}>
                 <div className="mb-2 flex items-center justify-between px-1">
                   <h2 className="text-sm font-semibold">{label}</h2>
                   <span className="tabular-nums text-xs text-muted">
+                    {dayApprox ? "≈ " : ""}
                     {formatMoney(dayTotal, user.currency, locale)}
                   </span>
                 </div>

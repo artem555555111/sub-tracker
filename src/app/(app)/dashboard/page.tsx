@@ -23,7 +23,7 @@ export default async function DashboardPage() {
     );
   }
 
-  const totals = computeTotals(subs);
+  const totals = computeTotals(subs, user.currency);
 
   return (
     <div className="space-y-6">
@@ -40,6 +40,7 @@ export default async function DashboardPage() {
         yearly={totals.yearly}
         currency={user.currency}
         locale={locale}
+        approx={totals.mixed}
       />
       <UpcomingList subs={subs} locale={locale} />
       <CategoryBreakdown
