@@ -1,8 +1,15 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { convert } from "@/lib/fx";
 import { type BillingCycle, monthlyAmount, yearlyAmount } from "@/lib/money";
+import de from "@/messages/de.json";
 import en from "@/messages/en.json";
+import es from "@/messages/es.json";
+import fr from "@/messages/fr.json";
+import it from "@/messages/it.json";
+import nl from "@/messages/nl.json";
 import pl from "@/messages/pl.json";
+import pt from "@/messages/pt.json";
+import ru from "@/messages/ru.json";
 
 // --- Result schema (spec block 8) -----------------------------------------
 export type CancelCandidate = { name: string; reason: string; monthly_amount: number };
@@ -28,6 +35,13 @@ export type AuditSub = {
 const CATALOGS: Record<string, Record<string, Record<string, string>>> = {
   en: en as never,
   pl: pl as never,
+  de: de as never,
+  fr: fr as never,
+  es: es as never,
+  it: it as never,
+  nl: nl as never,
+  pt: pt as never,
+  ru: ru as never,
 };
 function tr(locale: string, ns: string, key: string, vars: Record<string, string | number> = {}): string {
   const cat = CATALOGS[locale] ?? CATALOGS.en;

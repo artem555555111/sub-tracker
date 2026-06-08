@@ -1,7 +1,7 @@
 // Locales that have message files today. Architecture supports adding the
 // rest of the spec's languages (de, fr, es, it, nl, pt) by dropping in a
 // messages/<locale>.json and extending this list.
-export const locales = ["en", "pl", "de", "fr", "es", "it", "nl", "pt"] as const;
+export const locales = ["en", "pl", "de", "fr", "es", "it", "nl", "pt", "ru"] as const;
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = "en";
 
@@ -18,4 +18,5 @@ export const LOCALE_LABELS: Record<string, string> = {
   it: "Italiano",
   nl: "Nederlands",
   pt: "Português",
+  ru: "Русский",
 };

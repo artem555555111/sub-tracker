@@ -1,13 +1,28 @@
 import { formatDate, formatMoney } from "@/lib/money";
+import de from "@/messages/de.json";
 import en from "@/messages/en.json";
+import es from "@/messages/es.json";
+import fr from "@/messages/fr.json";
+import it from "@/messages/it.json";
+import nl from "@/messages/nl.json";
 import pl from "@/messages/pl.json";
+import pt from "@/messages/pt.json";
+import ru from "@/messages/ru.json";
 
 // Standalone localized strings for background sends (cron / email), so we don't
-// depend on next-intl's request scope. Falls back to English.
+// depend on next-intl's request scope. Covers all supported locales; falls back
+// to English for anything unknown.
 type Catalog = { notifications: Record<string, string> };
 const CATALOGS: Record<string, Catalog> = {
   en: en as unknown as Catalog,
   pl: pl as unknown as Catalog,
+  de: de as unknown as Catalog,
+  fr: fr as unknown as Catalog,
+  es: es as unknown as Catalog,
+  it: it as unknown as Catalog,
+  nl: nl as unknown as Catalog,
+  pt: pt as unknown as Catalog,
+  ru: ru as unknown as Catalog,
 };
 
 const APP_URL = process.env.AUTH_URL ?? "http://localhost:3001";

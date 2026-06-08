@@ -1,11 +1,13 @@
 import "dotenv/config";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client";
 
-// Seeds deterministic subscriptions for the test user to exercise the cron:
+// Seeds deterministic subscriptions for a test user to exercise the cron:
 // a payment due in 2 days, a trial ending tomorrow, and an overdue one.
+// Target user: TEST_EMAIL env or first CLI arg (default test@subtrack.dev).
+const TEST_EMAIL = process.env.TEST_EMAIL ?? process.argv[2] ?? "test@subtrack.dev";
 const prisma = new PrismaClient({
-  adapter: new PrismaBetterSqlite3({ url: process.env.DATABASE_URL ?? "file:./dev.db" }),
+  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
 });
 
 function day(offset: number): Date {
@@ -16,8 +18,8 @@ function day(offset: number): Date {
 }
 
 async function main() {
-  const user = await prisma.user.findUnique({ where: { email: "test@subtrack.dev" } });
-  if (!user) throw new Error("test user not found — sign up test@subtrack.dev first");
+  const user = await prisma.user.findUnique({ where: { email: TEST_EMAIL } });
+  if (!user) throw new Error(`test user not found — sign up ${TEST_EMAIL} first`);
 
   const names = ["Spotify (reminder test)", "Trial test", "Overdue test"];
   await prisma.notificationLog.deleteMany({ where: { userId: user.id } });
