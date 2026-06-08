@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { PremiumGate } from "@/components/premium-gate";
 import { categoryColor } from "@/lib/categories";
 import { convert } from "@/lib/fx";
 import {
@@ -19,9 +20,23 @@ type Occ = { date: Date; name: string; amount: number; currency: string; categor
 
 export default async function CalendarPage() {
   const user = await requireUser();
+  const t = await getTranslations("calendar");
+
+  // Calendar is a Premium feature — free users see an upsell instead.
+  if (user.plan !== "premium") {
+    return (
+      <div className="space-y-5">
+        <header>
+          <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
+          <p className="text-sm text-muted">{t("subtitle", { days: WINDOW_DAYS })}</p>
+        </header>
+        <PremiumGate />
+      </div>
+    );
+  }
+
   const subs = await getActiveSubscriptions(user.id);
   const locale = await getLocale();
-  const t = await getTranslations("calendar");
 
   const today = startOfDay(new Date());
   const end = new Date(today);

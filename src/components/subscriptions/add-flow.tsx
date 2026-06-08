@@ -7,7 +7,7 @@ import { ChevronLeftIcon, PlusIcon, SearchIcon } from "@/components/icons";
 import { ServiceLogo } from "@/components/service-logo";
 import { createSubscription } from "@/lib/actions/subscriptions";
 import { categoryColor } from "@/lib/categories";
-import { btnPrimary, btnSecondary, inputClass, labelClass, selectClass } from "@/lib/ui";
+import { btnPrimary, inputClass, labelClass, selectClass } from "@/lib/ui";
 
 type CatalogItem = {
   id: string;
@@ -52,14 +52,12 @@ export function AddFlow({
   const tcy = useTranslations("cycles");
   const tg = useTranslations("genericBills");
   const tcommon = useTranslations("common");
-  const tplan = useTranslations("plan");
   const router = useRouter();
 
   const [step, setStep] = useState(1);
   const [query, setQuery] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [paywall, setPaywall] = useState(false);
 
   const [form, setForm] = useState({
     serviceName: "",
@@ -166,8 +164,7 @@ export function AddFlow({
     });
     setSaving(false);
 
-    if (res?.error === "limit") setPaywall(true);
-    else if (res?.error) setError(t("priceRequired"));
+    if (res?.error) setError(t("priceRequired"));
     // success path performs a server-side redirect to /dashboard
   }
 
@@ -406,15 +403,6 @@ export function AddFlow({
         </div>
       )}
 
-      {paywall && (
-        <Paywall
-          title={tplan("limitTitle")}
-          desc={tplan("limitDesc", { limit: 5 })}
-          upgrade={tplan("upgrade")}
-          later={tplan("maybeLater")}
-          onClose={() => setPaywall(false)}
-        />
-      )}
     </div>
   );
 }
@@ -577,36 +565,5 @@ function ServiceRow({
         </span>
       )}
     </button>
-  );
-}
-
-function Paywall({
-  title,
-  desc,
-  upgrade,
-  later,
-  onClose,
-}: {
-  title: string;
-  desc: string;
-  upgrade: string;
-  later: string;
-  onClose: () => void;
-}) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 sm:items-center">
-      <div className="w-full max-w-md rounded-2xl border border-border bg-card p-5 shadow-xl">
-        <h2 className="text-lg font-bold">{title}</h2>
-        <p className="mt-2 text-sm text-muted">{desc}</p>
-        <div className="mt-5 space-y-2">
-          <a href="/upgrade" className={btnPrimary}>
-            {upgrade}
-          </a>
-          <button type="button" onClick={onClose} className={btnSecondary}>
-            {later}
-          </button>
-        </div>
-      </div>
-    </div>
   );
 }

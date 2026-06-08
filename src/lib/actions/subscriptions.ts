@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { FREE_PLAN_LIMIT } from "@/lib/constants";
 import { getCurrentUser } from "@/lib/session";
 
 const cycleEnum = z.enum(["monthly", "yearly", "quarterly", "weekly", "custom"]);
@@ -45,14 +44,8 @@ export async function createSubscription(
   if (!parsed.success) return { error: "invalid" };
   const data = parsed.data;
 
-  // Free plan: cap active subscriptions (spec block 7) — soft paywall.
-  if (user.plan === "free") {
-    const active = await prisma.subscription.count({
-      where: { userId: user.id, status: "active" },
-    });
-    if (active >= FREE_PLAN_LIMIT) return { error: "limit" };
-  }
-
+  // Tracking is unlimited on all plans — the core stays free to drive adoption.
+  // Premium value lives in the audit, calendar and export instead.
   await prisma.subscription.create({
     data: {
       userId: user.id,

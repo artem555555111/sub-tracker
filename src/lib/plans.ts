@@ -21,9 +21,14 @@ export const PLANS: PlanDef[] = [
     amount: 19.99,
     interval: "year",
     priceEnv: "STRIPE_PRICE_YEARLY",
+  },
+  {
+    id: "lifetime",
+    mode: "payment",
+    amount: 39.99,
+    priceEnv: "STRIPE_PRICE_LIFETIME",
     recommended: true,
   },
-  { id: "lifetime", mode: "payment", amount: 39.99, priceEnv: "STRIPE_PRICE_LIFETIME" },
 ];
 
 export function getPlan(id: string): PlanDef | undefined {

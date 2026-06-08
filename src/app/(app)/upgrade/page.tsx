@@ -5,7 +5,7 @@ import { CheckIcon, ChevronLeftIcon } from "@/components/icons";
 import { requireUser } from "@/lib/session";
 import { stripeConfigured } from "@/lib/stripe";
 
-const BENEFITS = ["benefit_unlimited", "benefit_ai", "benefit_export", "benefit_calendar"];
+const BENEFITS = ["benefit_ai", "benefit_calendar"];
 
 export default async function UpgradePage() {
   await requireUser();
