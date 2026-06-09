@@ -320,5 +320,13 @@
     "cycleTitle": "Por ciclo de facturación",
     "empty": "Añade suscripciones para ver estadísticas.",
     "trendTitle": "Evolución del gasto"
+  },
+  "calculator": {
+    "title": "Calculadora de costes de suscripción",
+    "subtitle": "Añade tus suscripciones y mira tu coste real mensual y anual — en un minuto, sin registro.",
+    "empty": "Elige los servicios que pagas para ver tu total.",
+    "ctaTitle": "¿Quieres recordatorios antes de cada pago?",
+    "cta": "Guardar y registrarse gratis",
+    "ctaNote": "Gratis. Sin conexión bancaria."
   }
 }

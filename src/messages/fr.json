@@ -320,5 +320,13 @@
     "cycleTitle": "Par cycle de facturation",
     "empty": "Ajoutez des abonnements pour voir les analyses.",
     "trendTitle": "Évolution des dépenses"
+  },
+  "calculator": {
+    "title": "Calculateur de coût des abonnements",
+    "subtitle": "Ajoutez vos abonnements et voyez votre coût réel mensuel et annuel — en une minute, sans inscription.",
+    "empty": "Choisissez les services que vous payez pour voir votre total.",
+    "ctaTitle": "Vous voulez des rappels avant chaque paiement ?",
+    "cta": "Enregistrer et s'inscrire gratuitement",
+    "ctaNote": "Gratuit. Sans connexion bancaire."
   }
 }

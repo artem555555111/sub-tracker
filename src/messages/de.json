@@ -320,5 +320,13 @@
     "cycleTitle": "Nach Abrechnungszeitraum",
     "empty": "Füge Abos hinzu, um Einblicke zu sehen.",
     "trendTitle": "Ausgabenverlauf"
+  },
+  "calculator": {
+    "title": "Abo-Kosten-Rechner",
+    "subtitle": "Füge deine Abos hinzu und sieh deine echten Monats- und Jahreskosten — in einer Minute, ohne Anmeldung.",
+    "empty": "Wähle die Dienste, für die du zahlst, um deine Summe zu sehen.",
+    "ctaTitle": "Möchtest du Erinnerungen vor jeder Zahlung?",
+    "cta": "Speichern & kostenlos registrieren",
+    "ctaNote": "Kostenlos. Ohne Bankverbindung."
   }
 }

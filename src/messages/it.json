@@ -320,5 +320,13 @@
     "cycleTitle": "Per ciclo di fatturazione",
     "empty": "Aggiungi abbonamenti per vedere le analisi.",
     "trendTitle": "Andamento della spesa"
+  },
+  "calculator": {
+    "title": "Calcolatore costi abbonamenti",
+    "subtitle": "Aggiungi i tuoi abbonamenti e scopri il costo reale mensile e annuale — in un minuto, senza registrazione.",
+    "empty": "Scegli i servizi che paghi per vedere il totale.",
+    "ctaTitle": "Vuoi promemoria prima di ogni pagamento?",
+    "cta": "Salva e registrati gratis",
+    "ctaNote": "Gratis. Senza collegamento bancario."
   }
 }

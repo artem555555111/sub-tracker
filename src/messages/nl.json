@@ -320,5 +320,13 @@
     "cycleTitle": "Per facturatieperiode",
     "empty": "Voeg abonnementen toe om inzichten te zien.",
     "trendTitle": "Uitgavenverloop"
+  },
+  "calculator": {
+    "title": "Abonnementskostencalculator",
+    "subtitle": "Voeg je abonnementen toe en zie je echte maandelijkse en jaarlijkse kosten — in een minuut, zonder account.",
+    "empty": "Kies de diensten waarvoor je betaalt om je totaal te zien.",
+    "ctaTitle": "Wil je herinneringen vóór elke betaling?",
+    "cta": "Bewaren & gratis aanmelden",
+    "ctaNote": "Gratis. Geen bankkoppeling."
   }
 }

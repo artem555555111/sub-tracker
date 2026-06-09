@@ -320,5 +320,13 @@
     "cycleTitle": "Wg cyklu rozliczeń",
     "empty": "Dodaj subskrypcje, aby zobaczyć statystyki.",
     "trendTitle": "Wzrost wydatków"
+  },
+  "calculator": {
+    "title": "Kalkulator kosztów subskrypcji",
+    "subtitle": "Dodaj swoje subskrypcje i zobacz realny koszt miesięczny i roczny — w minutę, bez rejestracji.",
+    "empty": "Wybierz usługi, za które płacisz, aby zobaczyć sumę.",
+    "ctaTitle": "Chcesz przypomnienia przed każdą płatnością?",
+    "cta": "Zapisz i załóż konto za darmo",
+    "ctaNote": "Za darmo. Bez łączenia z bankiem."
   }
 }

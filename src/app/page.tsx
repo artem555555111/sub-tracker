@@ -16,6 +16,7 @@ import { btnPrimary } from "@/lib/ui";
 export default async function Home() {
   if (await getCurrentUser()) redirect("/dashboard");
   const t = await getTranslations("landing");
+  const tcalc = await getTranslations("calculator");
 
   const features = [
     { Icon: ShieldIcon, title: t("privacyTitle"), desc: t("privacyDesc") },
@@ -40,6 +41,12 @@ export default async function Home() {
         <p className="mt-4 text-balance text-muted">{t("subtitle")}</p>
         <Link href="/signup" className={`${btnPrimary} mt-7`}>
           {t("ctaStart")}
+        </Link>
+        <Link
+          href="/calculator"
+          className="mt-3 block text-center text-sm font-semibold text-primary"
+        >
+          {tcalc("title")} →
         </Link>
       </section>
 

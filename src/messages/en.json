@@ -320,5 +320,13 @@
     "cycleTitle": "By billing cycle",
     "empty": "Add subscriptions to see insights.",
     "trendTitle": "Spending growth"
+  },
+  "calculator": {
+    "title": "Subscription cost calculator",
+    "subtitle": "Add what you pay for and see your real monthly and yearly total — in a minute, no sign-up needed.",
+    "empty": "Pick the services you pay for to see your total.",
+    "ctaTitle": "Want reminders before every payment?",
+    "cta": "Save these & sign up free",
+    "ctaNote": "Free. No bank connection."
   }
 }
