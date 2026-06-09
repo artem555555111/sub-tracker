@@ -10,17 +10,42 @@ import "./globals.css";
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
+const SITE_URL = "https://sub-tracker-seven.vercel.app";
+const SHARE_TITLE = `${APP_NAME} — Take control of your subscriptions`;
+const SHARE_DESC =
+  "See what you really spend on subscriptions. Reminders before every payment, multi-currency, AI audit — private by design.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   applicationName: APP_NAME,
   title: {
-    default: `${APP_NAME} — Subscription tracker`,
+    default: `${APP_NAME} — Subscription tracker for Europe`,
     template: `%s · ${APP_NAME}`,
   },
   description:
-    "Track your subscriptions and recurring bills across Europe. Private, multilingual, multi-currency.",
+    "Track your subscriptions and recurring bills in one place. Find out how much you really spend, get reminders before every payment. Private, multilingual, multi-currency.",
+  keywords: [
+    "subscription tracker",
+    "subscription manager",
+    "recurring payments",
+    "subscription cost",
+    "bill reminders",
+  ],
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, title: APP_NAME, statusBarStyle: "default" },
   formatDetection: { telephone: false },
+  openGraph: {
+    type: "website",
+    siteName: APP_NAME,
+    url: SITE_URL,
+    title: SHARE_TITLE,
+    description: SHARE_DESC,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SHARE_TITLE,
+    description: SHARE_DESC,
+  },
 };
 
 export const viewport: Viewport = {
