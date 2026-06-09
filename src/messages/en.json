@@ -178,7 +178,11 @@
     "trialUntil": "Free trial until {date}",
     "perYearLabel": "per year",
     "perMonthLabel": "per month",
-    "saved": "Saved"
+    "saved": "Saved",
+    "cancelHelpTitle": "How to cancel",
+    "cancelHelpDesc": "Open the service's account or billing settings and cancel before your next payment date.",
+    "cancelHelpOpen": "Open cancellation page",
+    "cancelHelpLocked": "Get step-by-step cancellation help with Premium."
   },
   "settings": {
     "title": "Settings",
@@ -306,5 +310,15 @@
     "empty": "No payments in the next {days} days.",
     "today": "Today",
     "tomorrow": "Tomorrow"
+  },
+  "insights": {
+    "title": "Insights",
+    "subtitle": "A deeper look at your spending.",
+    "forecastTitle": "Projected yearly spend",
+    "topTitle": "Top subscriptions",
+    "categoryTitle": "Yearly spend by category",
+    "cycleTitle": "By billing cycle",
+    "empty": "Add subscriptions to see insights.",
+    "trendTitle": "Spending growth"
   }
 }

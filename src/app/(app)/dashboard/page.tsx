@@ -1,5 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { AddFab } from "@/components/add-fab";
+import { ChevronRightIcon } from "@/components/icons";
 import { InstallPrompt } from "@/components/install-prompt";
 import { CategoryBreakdown } from "@/components/dashboard/category-breakdown";
 import { EmptyState } from "@/components/dashboard/empty-state";
@@ -13,6 +15,7 @@ export default async function DashboardPage() {
   const subs = await getActiveSubscriptions(user.id);
   const locale = await getLocale();
   const t = await getTranslations("dashboard");
+  const ti = await getTranslations("insights");
 
   if (subs.length === 0) {
     return (
@@ -49,6 +52,17 @@ export default async function DashboardPage() {
         currency={user.currency}
         locale={locale}
       />
+
+      <Link
+        href="/insights"
+        className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 transition hover:border-primary/40"
+      >
+        <span>
+          <span className="font-semibold">{ti("title")}</span>
+          <span className="mt-0.5 block text-xs text-muted">{ti("subtitle")}</span>
+        </span>
+        <ChevronRightIcon className="size-5 shrink-0 text-muted" />
+      </Link>
 
       <AddFab label={t("add")} />
     </div>

@@ -178,7 +178,11 @@
     "trialUntil": "Teste gratuito até {date}",
     "perYearLabel": "por ano",
     "perMonthLabel": "por mês",
-    "saved": "Guardado"
+    "saved": "Guardado",
+    "cancelHelpTitle": "Como cancelar",
+    "cancelHelpDesc": "Abra as configurações de conta ou faturação do serviço e cancele antes da próxima data de pagamento.",
+    "cancelHelpOpen": "Abrir página de cancelamento",
+    "cancelHelpLocked": "Tenha ajuda de cancelamento passo a passo com o Premium."
   },
   "settings": {
     "title": "Definições",
@@ -306,5 +310,15 @@
     "empty": "Sem pagamentos nos próximos {days} dias.",
     "today": "Hoje",
     "tomorrow": "Amanhã"
+  },
+  "insights": {
+    "title": "Análises",
+    "subtitle": "Um olhar mais detalhado sobre os seus gastos.",
+    "forecastTitle": "Gasto anual previsto",
+    "topTitle": "Principais subscrições",
+    "categoryTitle": "Gasto anual por categoria",
+    "cycleTitle": "Por ciclo de faturação",
+    "empty": "Adicione subscrições para ver as análises.",
+    "trendTitle": "Evolução dos gastos"
   }
 }

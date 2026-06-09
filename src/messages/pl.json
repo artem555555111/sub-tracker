@@ -178,7 +178,11 @@
     "trialUntil": "Bezpłatny okres próbny do {date}",
     "perYearLabel": "rocznie",
     "perMonthLabel": "miesięcznie",
-    "saved": "Zapisano"
+    "saved": "Zapisano",
+    "cancelHelpTitle": "Jak anulować",
+    "cancelHelpDesc": "Otwórz ustawienia konta lub płatności usługi i anuluj przed następną datą płatności.",
+    "cancelHelpOpen": "Otwórz stronę anulowania",
+    "cancelHelpLocked": "Uzyskaj pomoc w anulowaniu krok po kroku dzięki Premium."
   },
   "settings": {
     "title": "Ustawienia",
@@ -306,5 +310,15 @@
     "empty": "Brak płatności w ciągu najbliższych {days} dni.",
     "today": "Dzisiaj",
     "tomorrow": "Jutro"
+  },
+  "insights": {
+    "title": "Statystyki",
+    "subtitle": "Dokładniejsze spojrzenie na Twoje wydatki.",
+    "forecastTitle": "Prognozowane wydatki roczne",
+    "topTitle": "Najdroższe subskrypcje",
+    "categoryTitle": "Roczne wydatki wg kategorii",
+    "cycleTitle": "Wg cyklu rozliczeń",
+    "empty": "Dodaj subskrypcje, aby zobaczyć statystyki.",
+    "trendTitle": "Wzrost wydatków"
   }
 }

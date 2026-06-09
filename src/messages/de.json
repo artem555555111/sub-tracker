@@ -178,7 +178,11 @@
     "trialUntil": "Kostenlose Testphase bis {date}",
     "perYearLabel": "pro Jahr",
     "perMonthLabel": "pro Monat",
-    "saved": "Gespeichert"
+    "saved": "Gespeichert",
+    "cancelHelpTitle": "So kündigst du",
+    "cancelHelpDesc": "Öffne die Konto- oder Zahlungseinstellungen des Dienstes und kündige vor dem nächsten Zahlungstermin.",
+    "cancelHelpOpen": "Kündigungsseite öffnen",
+    "cancelHelpLocked": "Erhalte mit Premium Schritt-für-Schritt-Hilfe beim Kündigen."
   },
   "settings": {
     "title": "Einstellungen",
@@ -306,5 +310,15 @@
     "empty": "Keine Zahlungen in den nächsten {days} Tagen.",
     "today": "Heute",
     "tomorrow": "Morgen"
+  },
+  "insights": {
+    "title": "Einblicke",
+    "subtitle": "Ein genauerer Blick auf deine Ausgaben.",
+    "forecastTitle": "Voraussichtliche Jahresausgaben",
+    "topTitle": "Größte Abos",
+    "categoryTitle": "Jahresausgaben nach Kategorie",
+    "cycleTitle": "Nach Abrechnungszeitraum",
+    "empty": "Füge Abos hinzu, um Einblicke zu sehen.",
+    "trendTitle": "Ausgabenverlauf"
   }
 }

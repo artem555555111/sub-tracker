@@ -178,7 +178,11 @@
     "trialUntil": "Prova gratuita fino al {date}",
     "perYearLabel": "all'anno",
     "perMonthLabel": "al mese",
-    "saved": "Salvato"
+    "saved": "Salvato",
+    "cancelHelpTitle": "Come annullare",
+    "cancelHelpDesc": "Apri le impostazioni dell'account o di fatturazione del servizio e annulla prima della prossima data di pagamento.",
+    "cancelHelpOpen": "Apri pagina di annullamento",
+    "cancelHelpLocked": "Ottieni assistenza all'annullamento passo dopo passo con Premium."
   },
   "settings": {
     "title": "Impostazioni",
@@ -306,5 +310,15 @@
     "empty": "Nessun pagamento nei prossimi {days} giorni.",
     "today": "Oggi",
     "tomorrow": "Domani"
+  },
+  "insights": {
+    "title": "Analisi",
+    "subtitle": "Uno sguardo più approfondito alle tue spese.",
+    "forecastTitle": "Spesa annuale prevista",
+    "topTitle": "Abbonamenti principali",
+    "categoryTitle": "Spesa annuale per categoria",
+    "cycleTitle": "Per ciclo di fatturazione",
+    "empty": "Aggiungi abbonamenti per vedere le analisi.",
+    "trendTitle": "Andamento della spesa"
   }
 }

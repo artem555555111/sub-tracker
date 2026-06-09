@@ -178,7 +178,11 @@
     "trialUntil": "Gratis proef tot {date}",
     "perYearLabel": "per jaar",
     "perMonthLabel": "per maand",
-    "saved": "Opgeslagen"
+    "saved": "Opgeslagen",
+    "cancelHelpTitle": "Hoe op te zeggen",
+    "cancelHelpDesc": "Open de account- of facturatie-instellingen van de dienst en zeg op vóór je volgende betaaldatum.",
+    "cancelHelpOpen": "Open opzegpagina",
+    "cancelHelpLocked": "Krijg stapsgewijze opzeghulp met Premium."
   },
   "settings": {
     "title": "Instellingen",
@@ -306,5 +310,15 @@
     "empty": "Geen betalingen in de komende {days} dagen.",
     "today": "Vandaag",
     "tomorrow": "Morgen"
+  },
+  "insights": {
+    "title": "Inzichten",
+    "subtitle": "Een diepere blik op je uitgaven.",
+    "forecastTitle": "Verwachte jaarlijkse uitgaven",
+    "topTitle": "Grootste abonnementen",
+    "categoryTitle": "Jaarlijkse uitgaven per categorie",
+    "cycleTitle": "Per facturatieperiode",
+    "empty": "Voeg abonnementen toe om inzichten te zien.",
+    "trendTitle": "Uitgavenverloop"
   }
 }
