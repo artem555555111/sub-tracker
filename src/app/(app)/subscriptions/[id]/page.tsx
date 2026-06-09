@@ -1,6 +1,7 @@
 import { getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { SubscriptionDetail } from "@/components/subscriptions/subscription-detail";
+import { cancelUrlFor } from "@/lib/cancel-guides";
 import { CATEGORIES } from "@/lib/categories";
 import { prisma } from "@/lib/db";
 import { CURRENCIES } from "@/lib/money";
@@ -45,6 +46,8 @@ export default async function SubscriptionPage({
       categories={CATEGORIES}
       currencies={[...CURRENCIES]}
       locale={locale}
+      plan={user.plan}
+      cancelUrl={cancelUrlFor(sub.serviceName)}
     />
   );
 }

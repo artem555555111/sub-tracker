@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
@@ -53,18 +54,24 @@ export function SubscriptionDetail({
   sub,
   categories,
   currencies,
+  plan,
+  cancelUrl,
 }: {
   sub: SubData;
   categories: string[];
   currencies: string[];
   locale: string;
+  plan: string;
+  cancelUrl: string | null;
 }) {
   const t = useTranslations("detail");
   const ta = useTranslations("add");
   const tc = useTranslations("categories");
   const tcy = useTranslations("cycles");
   const tcommon = useTranslations("common");
+  const tplan = useTranslations("plan");
   const router = useRouter();
+  const isPremium = plan === "premium";
 
   const [form, setForm] = useState(sub);
   const [saving, setSaving] = useState(false);
@@ -374,6 +381,32 @@ export function SubscriptionDetail({
           />
         </span>
       </button>
+
+      <div className="rounded-2xl border border-border bg-card p-4">
+        <p className="font-medium">{t("cancelHelpTitle")}</p>
+        {isPremium ? (
+          <>
+            <p className="mt-1 text-sm text-muted">{t("cancelHelpDesc")}</p>
+            {cancelUrl && (
+              <a
+                href={cancelUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${btnSecondary} mt-3`}
+              >
+                {t("cancelHelpOpen")}
+              </a>
+            )}
+          </>
+        ) : (
+          <>
+            <p className="mt-1 text-sm text-muted">{t("cancelHelpLocked")}</p>
+            <Link href="/upgrade" className={`${btnPrimary} mt-3`}>
+              {tplan("upgrade")}
+            </Link>
+          </>
+        )}
+      </div>
 
       <div className="grid grid-cols-2 gap-3">
         {form.status === "paused" ? (

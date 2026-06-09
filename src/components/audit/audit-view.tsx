@@ -6,6 +6,7 @@ import { useState } from "react";
 import { SparklesIcon } from "@/components/icons";
 import { runAuditAction } from "@/lib/actions/audit";
 import type { AuditResult } from "@/lib/audit";
+import { cancelUrlFor } from "@/lib/cancel-guides";
 import { formatMoney, formatMoneyRounded } from "@/lib/money";
 import { btnPrimary } from "@/lib/ui";
 
@@ -23,6 +24,7 @@ export function AuditView({
   initial: Initial;
 }) {
   const t = useTranslations("audit");
+  const td = useTranslations("detail");
   const [result, setResult] = useState<AuditResult | null>(initial?.result ?? null);
   const [source, setSource] = useState<string | null>(initial?.source ?? null);
   const [running, setRunning] = useState(false);
@@ -88,18 +90,31 @@ export function AuditView({
                   </p>
                 ) : (
                   <div className="space-y-2">
-                    {result.cancel_candidates.map((c, i) => (
-                      <div key={i} className="rounded-2xl border border-border bg-card p-3.5">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="font-medium">{c.name}</span>
-                          <span className="shrink-0 text-sm font-semibold tabular-nums">
-                            {formatMoney(c.monthly_amount, result.currency, locale)}
-                            <span className="text-xs text-muted">{t("perMonthShort")}</span>
-                          </span>
+                    {result.cancel_candidates.map((c, i) => {
+                      const cancelUrl = cancelUrlFor(c.name);
+                      return (
+                        <div key={i} className="rounded-2xl border border-border bg-card p-3.5">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="font-medium">{c.name}</span>
+                            <span className="shrink-0 text-sm font-semibold tabular-nums">
+                              {formatMoney(c.monthly_amount, result.currency, locale)}
+                              <span className="text-xs text-muted">{t("perMonthShort")}</span>
+                            </span>
+                          </div>
+                          <p className="mt-0.5 text-sm text-muted">{c.reason}</p>
+                          {cancelUrl && (
+                            <a
+                              href={cancelUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="mt-1.5 inline-block text-xs font-semibold text-primary"
+                            >
+                              {td("cancelHelpOpen")} →
+                            </a>
+                          )}
                         </div>
-                        <p className="mt-0.5 text-sm text-muted">{c.reason}</p>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </section>
